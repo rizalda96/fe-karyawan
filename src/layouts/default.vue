@@ -1,0 +1,61 @@
+<script setup>
+import { switcherStore } from '@/stores/switcher'
+import Switcher from './components/switcher/switcher.vue'
+import Header from './components/header/header.vue'
+import Sidebar from './components/sidebar/sidebar.vue'
+import Footer from './components/footer/footer.vue'
+import Backtotop from './components/backtotop/backtotop.vue'
+
+// Reactive store
+const switcher = reactive(switcherStore())
+
+// Computed class
+const customClass = computed(() => (switcher.pageStyles === 'flat' ? 'main-body-container' : ''))
+
+// Scroll progress logic
+const progressRef = ref(null)
+
+const handleScroll = () => {
+  const scrollTop = document.documentElement.scrollTop || document.body.scrollTop
+  const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight
+
+  if (scrollHeight === 0) return
+
+  const scrollPercent = (scrollTop / scrollHeight) * 100
+
+  if (progressRef.value) {
+    progressRef.value.style.width = `${scrollPercent}%`
+  }
+}
+
+onMounted(() => {
+  window.addEventListener('scroll', handleScroll)
+  switcher.retrieveFromLocalStorage()
+})
+
+onBeforeUnmount(() => {
+  window.removeEventListener('scroll', handleScroll)
+})
+</script>
+
+<template>
+  <div ref="progressRef" class="progress-top-bar"></div>
+  <Switcher />
+  <div class="page">
+    <Header />
+    <Sidebar />
+
+    <!-- Start::app-content -->
+    <div class="main-content app-content">
+      <div :class="['container-fluid', 'page-container', customClass]">
+        <router-view />
+      </div>
+    </div>
+    <!-- End::app-content -->
+
+    <Footer />
+  </div>
+  <Backtotop />
+</template>
+
+<style scoped lang="scss"></style>

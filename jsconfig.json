@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "target": "esnext",
+    "module": "esnext",
+    "moduleResolution": "Bundler",
+    "jsx": "preserve",
+    "paths": {
+      "@/*": ["./src/*"],
+      "@styles/*": ["./src/assets/styles/*"]
+    },
+    "types": ["vite/client", "unplugin-vue-router/client", "vite-plugin-vue-layouts/client"]
+  },
+  "exclude": ["./dist", "./node_modules"],
+  "types": ["vite/client", "unplugin-vue-router/client", "vite-plugin-vue-layouts/client"]
+}
