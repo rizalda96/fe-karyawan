@@ -11,28 +11,23 @@ export const useAuthStore = defineStore('auth', {
   actions: {
     async signIn(credential) {
       try {
-        const { data } = await AuthService.login(credential)
+        const response = await AuthService.login(credential)
 
-        this.token = data.data.token
+        const { token, user } = response.data
+
+        this.token = token
         this.permissions = [
           {
             action: 'manage',
             subject: 'all',
           },
-          // {
-          //   action: 'read',
-          //   subject: 'Second Page',
-          // },
-          // // {
-          // //   action: 'read',
-          // //   subject: 'Third Page',
-          // // },
-          // {
-          //   action: 'read',
-          //   subject: 'Fourth Page',
-          // }
         ]
-        return data
+        this.user = user
+
+        return {
+          status: !!token,
+          messages: 'Login successful!',
+        }
       } catch (error) {
         console.error(error)
         throw error
@@ -43,7 +38,7 @@ export const useAuthStore = defineStore('auth', {
   // },
   persist: {
     storage: sessionStorage,
-    pick: ['token', 'permissions'],
+    pick: ['token', 'permissions', 'user'],
   },
 })
 

@@ -7,7 +7,7 @@
         <!-- Start::header-element -->
         <div class="header-element">
           <div class="horizontal-logo">
-            <router-link to="/dashboards/sales" class="header-logo">
+            <router-link to="/" class="header-logo">
               <img src="/images/brand-logos/desktop-logo.png" alt="logo" class="desktop-logo" />
               <img src="/images/brand-logos/toggle-logo.png" alt="logo" class="toggle-logo" />
               <img src="/images/brand-logos/desktop-dark.png" alt="logo" class="desktop-dark" />
@@ -269,97 +269,6 @@
         <!-- End::header-element -->
 
         <!-- Start::header-element -->
-        <li class="header-element notifications-dropdown d-xl-block d-none dropdown">
-          <!-- Start::header-link|dropdown-toggle -->
-          <a
-            href="javascript:void(0);"
-            class="header-link dropdown-toggle"
-            data-bs-toggle="dropdown"
-            data-bs-auto-close="outside"
-            id="messageDropdown"
-            aria-expanded="false"
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" class="header-link-icon" viewBox="0 0 256 256">
-              <rect width="256" height="256" fill="none" />
-              <path
-                d="M56,104a72,72,0,0,1,144,0c0,35.82,8.3,64.6,14.9,76A8,8,0,0,1,208,192H48a8,8,0,0,1-6.88-12C47.71,168.6,56,139.81,56,104Z"
-                opacity="0.2"
-              />
-              <path
-                d="M96,192a32,32,0,0,0,64,0"
-                fill="none"
-                stroke="currentColor"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="16"
-              />
-              <path
-                d="M56,104a72,72,0,0,1,144,0c0,35.82,8.3,64.6,14.9,76A8,8,0,0,1,208,192H48a8,8,0,0,1-6.88-12C47.71,168.6,56,139.81,56,104Z"
-                fill="none"
-                stroke="currentColor"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="16"
-              />
-            </svg>
-            <span class="header-icon-pulse bg-secondary rounded pulse pulse-secondary"></span>
-          </a>
-          <!-- End::header-link|dropdown-toggle -->
-          <!-- Start::main-header-dropdown -->
-          <div
-            class="main-header-dropdown dropdown-menu dropdown-menu-end"
-            data-popper-placement="none"
-          >
-            <div class="p-3 bg-primary text-fixed-white">
-              <div class="d-flex align-items-center justify-content-between">
-                <p class="mb-0 fs-16">Notifications</p>
-                <a href="javascript:void(0);" class="badge bg-light text-default border"
-                  >Clear All</a
-                >
-              </div>
-            </div>
-            <div class="dropdown-divider"></div>
-            <PerfectScrollbar class="list-unstyled mb-0" id="header-notification-scroll">
-              <li
-                :class="`dropdown-item position-relative ${idx.liClass}`"
-                v-for="idx in Notifications"
-                :key="idx.id"
-              >
-                <router-link to="#!" class="stretched-link"></router-link>
-                <div class="d-flex align-items-start gap-3">
-                  <div class="lh-1">
-                    <span class="avatar avatar-sm avatar-rounded bg-primary-transparent">
-                      <img v-if="idx.avatar" :src="idx.avatar" alt="" />
-                      <i v-if="idx.icon" class="ri-notification-line fs-16"></i>
-                    </span>
-                  </div>
-                  <div class="flex-fill">
-                    <span class="d-block fw-semibold">{{ idx.title }}</span>
-                    <span class="d-block text-muted fs-12">{{ idx.description }}</span>
-                  </div>
-                  <div class="text-end">
-                    <span class="d-block mb-1 fs-12 text-muted">{{ idx.time }}</span>
-                    <span :class="`d-block text-primary ${idx.isUnread ? '' : 'd-none'} `"
-                      ><i class="ri-circle-fill fs-9"></i
-                    ></span>
-                  </div>
-                </div>
-              </li>
-            </PerfectScrollbar>
-            <div class="p-5 empty-item1 d-none">
-              <div class="text-center">
-                <span class="avatar avatar-xl avatar-rounded bg-secondary-transparent">
-                  <i class="ri-notification-off-line fs-2"></i>
-                </span>
-                <h6 class="fw-medium mt-3">No New Notifications</h6>
-              </div>
-            </div>
-          </div>
-          <!-- End::main-header-dropdown -->
-        </li>
-        <!-- End::header-element -->
-
-        <!-- Start::header-element -->
         <li class="header-element header-fullscreen">
           <a @click="toggleFullScreen()" href="javascript:void(0);" class="header-link">
             <svg
@@ -492,27 +401,17 @@
                   </span>
                 </div>
                 <div>
-                  <span class="d-block fw-semibold lh-1">Tom Phillip</span>
-                  <span class="text-muted fs-12">tomphillip32@gmail.com</span>
+                  <span class="d-block fw-semibold lh-1">{{
+                    store.user?.email.split('@')[0] ?? 'User'
+                  }}</span>
+                  <span class="text-muted fs-12">{{
+                    store.user?.email ?? 'User@example.com'
+                  }}</span>
                 </div>
               </div>
             </div>
             <div class="dropdown-divider"></div>
             <ul class="list-unstyled mb-0">
-              <li>
-                <ul class="list-unstyled mb-0 sub-list">
-                  <li>
-                    <router-link class="dropdown-item d-flex align-items-center" to="#!"
-                      ><i class="ti ti-user-circle me-2 fs-18"></i>View Profile</router-link
-                    >
-                  </li>
-                  <li>
-                    <router-link class="dropdown-item d-flex align-items-center" to="#!">
-                      <i class="ti ti-settings-cog me-2 fs-18"></i>Account Settings
-                    </router-link>
-                  </li>
-                </ul>
-              </li>
               <li>
                 <button @click.prevent="logout" class="dropdown-item d-flex align-items-center">
                   <i class="ti ti-logout me-2 fs-18"></i> Log Out
@@ -638,15 +537,9 @@
 import { toast } from 'vue3-toastify'
 import 'vue3-toastify/dist/index.css'
 import { Tooltip } from 'bootstrap'
-import { PerfectScrollbar } from 'vue3-perfect-scrollbar'
 import 'vue3-perfect-scrollbar/style.css'
-import {
-  Notifications,
-  notificationNotes as initialNotificationNotes,
-} from '../../../data/header.ts'
 import { switcherStore } from '@/stores/switcher.js'
 import MENUITEMS from '@/navigation/index.js'
-import Quantity from '@/components/UI/quantity.vue'
 import { useAuthStore } from '@/stores/auth.store.js'
 // import Quantity from '../../UI/quantity.vue'
 
@@ -658,7 +551,6 @@ const router = useRouter()
 const isFullScreen = ref(false)
 const search = ref('')
 const showSuggestions = ref(false)
-const notificationNotes = ref([...initialNotificationNotes])
 
 // Functions
 const colorthemeFn = (value) => {
@@ -719,29 +611,6 @@ const toggleFullScreen = () => {
 
 const fullscreenChanged = () => {
   isFullScreen.value = !!document.fullscreenElement
-}
-
-const handleCartDelete = (id) => {
-  notificationNotes.value = notificationNotes.value.filter((item) => item.id !== id)
-}
-
-const dec = (event) => {
-  event.preventDefault()
-  const input = event.currentTarget.parentElement?.querySelector('input')
-  if (input) {
-    const unit = Number(input.value)
-    if (unit > 1) {
-      input.value = String(unit - 1)
-    }
-  }
-}
-
-const inc = (event) => {
-  event.preventDefault()
-  const input = event.currentTarget.parentElement?.querySelector('input')
-  if (input) {
-    input.value = String(Number(input.value) + 1)
-  }
 }
 
 const handleClickOutside = () => {
@@ -807,19 +676,24 @@ onUnmounted(() => {
 
 const loading = ref(false)
 const store = useAuthStore()
-const logout = async () => {
-  loading.value = true
-  toast.success('Log Out successful!', {
-    theme: 'auto',
-    icon: true,
-    autoClose: true,
-    position: 'top-right',
-    hideProgressBar: true,
-  })
+const logout = () => {
+  Promise.resolve().then(() => {
+    loading.value = true
+    toast.success('Log Out successful!', {
+      theme: 'auto',
+      icon: true,
+      autoClose: true,
+      position: 'top-right',
+      hideProgressBar: true,
+    })
 
-  setTimeout(() => (loading.value = false), 500)
-  store.$reset()
-  sessionStorage.clear()
-  window.location.href = `${import.meta.env.BASE_URL}/login`
+    store.$reset()
+    sessionStorage.clear()
+
+    setTimeout(() => {
+      loading.value = false
+      window.location.href = `/`
+    }, 1000)
+  })
 }
 </script>

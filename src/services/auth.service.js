@@ -6,13 +6,8 @@ class AuthService extends BaseService {
   }
 
   login(credential) {
-    const payload = {
-      tfn: 'HERP',
-      ...credential,
-    }
-
     return this.$http
-      .post(`${this.$app.api_url}auth/login/create_next`, payload)
+      .post(`${this.$app.api_url}auth/login`, credential)
       .then((response) => response)
       .catch(({ response }) => response)
   }

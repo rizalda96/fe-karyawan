@@ -18,26 +18,20 @@
               </div>
               <div class="row gy-3">
                 <div class="col-xl-12">
-                  <label for="username" class="form-label text-default">Username</label>
-                  <Field
-                    id="username"
-                    name="username"
-                    v-model="form.username"
-                    v-slot="{ meta, field }"
-                  >
+                  <label for="email" class="form-label text-default">Email</label>
+                  <Field id="email" name="email" v-model="form.email" v-slot="{ meta, field }">
                     <input
                       v-bind="field"
                       type="text"
-                      v-maska="'***'"
                       class="form-control"
-                      placeholder="Enter Username"
+                      placeholder="Enter Email"
                       :class="{
                         'is-valid': meta.valid && meta.touched,
                         'is-invalid': !meta.valid && meta.touched,
                       }"
                     />
                   </Field>
-                  <ErrorMessage name="username" v-slot="{ message }">
+                  <ErrorMessage name="email" v-slot="{ message }">
                     <div class="invalid-feedback">{{ message }}</div>
                   </ErrorMessage>
                 </div>
@@ -117,7 +111,7 @@ const $app = inject('app')
 
 const loading = ref(false)
 const form = reactive({
-  username: null,
+  email: null,
   password: null,
 })
 
@@ -152,7 +146,7 @@ const handleLogin = async () => {
   try {
     loading.value = true
 
-    const { data, errors, status, messages } = await store.signIn(form)
+    const { status, messages } = await store.signIn(form)
     if (!status) return $app.warning(messages || 'Login failed!')
 
     toast.success(messages || 'Login successful!', {
@@ -163,8 +157,10 @@ const handleLogin = async () => {
       hideProgressBar: true,
     })
 
-    setTimeout(() => (loading.value = true), 250)
-    window.location.href = `${import.meta.env.BASE_URL}/mar-dashboard-page`
+    setTimeout(() => {
+      loading.value = true
+      window.location.href = `/`
+    }, 1000)
   } catch (err) {
     loading.value = false
     console.error(err)
