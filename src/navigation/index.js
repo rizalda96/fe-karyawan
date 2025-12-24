@@ -14,7 +14,7 @@ export default [
   {
     path: '/second-page',
     title: 'Second Page',
-    icon: Svgicons.Dashboardicon,
+    icon: Svgicons.Applicationicon,
     type: 'link',
     active: false,
     dirchange: false,
