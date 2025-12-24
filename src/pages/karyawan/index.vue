@@ -174,8 +174,6 @@ const handleDelete = (id) => {
       text: 'Apakah anda yakin akan menghapus data ?',
       preConfirm: () => {
         return $http.delete(`${$app.api_url}karyawan/${id}/delete`).then((response) => {
-          console.log(response)
-
           if (response.status > 300) {
             let errors = response.data.message
             throw new Error(errors)
@@ -215,7 +213,7 @@ const handleDelete = (id) => {
       }
     }
 
-    .bh-table-responsive table.bh-table-striped tbody tr:nth-child(2n + 1) {
+    .bh-table-responsive table.bh-table-striped tbody tr {
       background-color: rgba(255, 255, 255, 0.05);
       color: white;
     }
