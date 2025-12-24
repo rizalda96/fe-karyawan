@@ -12,8 +12,8 @@ export default [
     subject: 'Dashboard',
   },
   {
-    path: '/second-page',
-    title: 'Second Page',
+    path: '/karyawan',
+    title: 'Karyawan',
     icon: Svgicons.Applicationicon,
     type: 'link',
     active: false,
