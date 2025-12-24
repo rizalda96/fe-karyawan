@@ -9,7 +9,7 @@
         <div class="col-xxl-4 col-xl-5 col-lg-6 col-md-7 col-sm-9 col-12">
           <div class="card custom-card border-0 my-4">
             <div class="card-body p-5">
-              <Form @submit="handleRegister" :validation-schema="schemaLogin()">
+              <Form @submit="handleSendMail" :validation-schema="schemaForgetPassword()">
                 <div class="mb-4">
                   <router-link to="/">
                     <img
@@ -46,7 +46,9 @@
                   </div>
                 </div>
                 <div class="d-grid mt-3">
-                  <router-link to="/login" class="btn btn-primary">Send Notification</router-link>
+                  <button :disabled="loading" type="submit" class="btn btn-primary">
+                    {{ loading ? 'Sending...' : 'Send Notification' }}
+                  </button>
                 </div>
                 <div class="text-center my-3 authentication-barrier">
                   <span class="op-4 fs-13">OR</span>
@@ -68,9 +70,10 @@
 import { Form, Field, ErrorMessage } from 'vee-validate'
 
 import ParticlesJs from '@/common/reuseble-plugin/particles-js.vue'
-import PasswordInput from '@/components/UI/passwordInput.vue'
 import { useAuthStore } from '@/stores/auth.store'
-import schemaLogin from '@/validations/auth'
+import { schemaForgetPassword } from '@/validations/auth'
+import { toast } from 'vue3-toastify'
+import 'vue3-toastify/dist/index.css'
 
 definePage({
   meta: {
@@ -80,22 +83,25 @@ definePage({
   },
 })
 
+const $app = inject('app')
 const store = useAuthStore()
 
 const loading = ref(false)
 const form = reactive({
   email: null,
-  password: null,
 })
 
-const handleRegister = async () => {
+const handleSendMail = async () => {
   try {
     loading.value = true
 
-    const { status, messages } = await store.signUp(form)
-    if (!status) return $app.warning(messages || 'Register failed!')
+    const response = await store.forgetPassword(form.email)
+    if (!response.status && !response.success) {
+      loading.value = false
+      return $app.warning(response.message || 'Verification failed!')
+    }
 
-    toast.success(messages || 'Register successful! Please check your email', {
+    toast.success(response.messages || 'Link verification has been sent! Please check your email', {
       theme: 'auto',
       icon: true,
       autoClose: true,
@@ -103,10 +109,10 @@ const handleRegister = async () => {
       hideProgressBar: true,
     })
 
-    // setTimeout(() => {
-    //   loading.value = true
-    //   window.location.href = `/`
-    // }, 1000)
+    setTimeout(() => {
+      loading.value = true
+      window.location.href = `/`
+    }, 1000)
   } catch (err) {
     loading.value = false
     console.error(err)

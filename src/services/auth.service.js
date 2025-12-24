@@ -21,6 +21,16 @@ class AuthService extends BaseService {
   verifyEmail(token, code) {
     return this.$http.post(`${this.$app.api_url}auth/verify`, { token, code })
   }
+  forgetPassword(email) {
+    return this.$http.post(`${this.$app.api_url}auth/forget-password`, { email })
+  }
+  resetPassword(token, credential) {
+    return this.$http.post(`${this.$app.api_url}auth/reset-password`, {
+      token,
+      password: credential.password,
+      confirmPassword: credential.confirmPassword
+    })
+  }
 }
 
 export default new AuthService()

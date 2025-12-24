@@ -18,7 +18,7 @@
                 <h4 class="mb-1 fw-semibold">Reset Password</h4>
                 <p class="mb-4 text-muted fw-normal">Set your new password here.</p>
               </div>
-              <Form @submit="handleResetPassword" :validation-schema="schemaLogin()">
+              <Form @submit="handleResetPassword" :validation-schema="schemaForgotPassword()">
                 <div class="row gy-3">
                   <div class="col-xl-12">
                     <label for="reset-newpassword" class="form-label text-default">
@@ -60,7 +60,7 @@
                       >
                         <input
                           v-bind="field"
-                          type="confirmPassword"
+                          type="password"
                           class="form-control"
                           placeholder="Enter Confirm Password"
                           :class="{
@@ -76,9 +76,12 @@
                   </div>
                 </div>
                 <div class="d-grid mt-3">
-                  <router-link to="/dashboards/sales" class="btn btn-primary"
+                  <!-- <router-link to="/dashboards/sales" class="btn btn-primary"
                     >Reset Password</router-link
-                  >
+                  > -->
+                  <button :disabled="loading" type="submit" class="btn btn-primary">
+                    {{ loading ? 'Sending...' : 'Reset Password' }}
+                  </button>
                 </div>
               </Form>
             </div>
@@ -92,10 +95,13 @@
 <script setup>
 import { Form, Field, ErrorMessage } from 'vee-validate'
 import ParticlesJs from '@/common/reuseble-plugin/particles-js.vue'
-import schemaLogin from '@/validations/auth'
+import { schemaForgotPassword } from '@/validations/auth'
 import { useAuthStore } from '@/stores/auth.store'
+import { toast } from 'vue3-toastify'
+import 'vue3-toastify/dist/index.css'
 
 definePage({
+  props: true,
   meta: {
     label: 'Reset Password',
     layout: 'blank',
@@ -103,6 +109,13 @@ definePage({
   },
 })
 
+const props = defineProps({
+  token: {
+    type: String,
+  },
+})
+
+const $app = inject('app')
 const store = useAuthStore()
 
 const loading = ref(false)
@@ -111,7 +124,29 @@ const form = reactive({
   confirmPassword: null,
 })
 
-const handleResetPassword = () => {}
+const handleResetPassword = async () => {
+  loading.value = true
+
+  const response = await store.resetPassword(props.token, form)
+
+  if (!response.status && !response.success) {
+    loading.value = false
+    return $app.warning(response.message || 'Reset password failed!')
+  }
+
+  toast.success('Reset password successful!', {
+    theme: 'auto',
+    icon: true,
+    autoClose: true,
+    position: 'top-right',
+    hideProgressBar: true,
+  })
+
+  setTimeout(() => {
+    loading.value = true
+    window.location.href = `/`
+  }, 1000)
+}
 </script>
 
 <style scoped>
