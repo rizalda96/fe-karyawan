@@ -1,23 +1,64 @@
-# starterkit
+# Tech stack
 
-This template should help get you started developing with Vue 3 in Vite.
+- Vue 3
+- Echart Apache
+- Vite
+- Bootstrap
+- pinia
 
-## Recommended IDE Setup
+## Penjelasan Arsitektur
 
-[VS Code](https://code.visualstudio.com/) + [Vue (Official)](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
+### Project Architecture Overview
 
-## Recommended Browser Setup
+Project ini menggunakan Vue 3 dengan pendekatan modular & scalable, mengombinasikan:
 
-- Chromium-based browsers (Chrome, Edge, Brave, etc.):
-  - [Vue.js devtools](https://chromewebstore.google.com/detail/vuejs-devtools/nhdogjmejiglipccpnnnanhbledajbpd) 
-  - [Turn on Custom Object Formatter in Chrome DevTools](http://bit.ly/object-formatters)
-- Firefox:
-  - [Vue.js devtools](https://addons.mozilla.org/en-US/firefox/addon/vue-js-devtools/)
-  - [Turn on Custom Object Formatter in Firefox DevTools](https://fxdx.dev/firefox-devtools-custom-object-formatters/)
+1. File-based routing
+2. Service layer (API abstraction)
+3. Pinia state management
+4. Layout-based UI architecture
 
-## Customize configuration
+### Assets
 
-See [Vite Configuration Reference](https://vite.dev/config/).
+Berisi asset statis aplikasi:
+
+1. CSS global
+2. Images
+3. Icons
+4. Fonts
+
+### components
+
+Berisi reusable UI components:
+
+1. Page Header
+
+### layouts
+
+Digunakan untuk konfigurasi navigasi & menu aplikasi.
+
+### pages
+
+Berisi halaman aplikasi berbasis route (file-based routing).
+
+### plugins
+
+Berisi plugin global Vue, seperti:
+
+1. Axios
+2. sweetalert
+3. casl
+
+### services
+
+Berisi abstraction layer untuk API / HTTP request.
+
+### stores
+
+Menggunakan Pinia sebagai state management.
+
+### validations
+
+Berisi schema validasi yup (form validation).
 
 ## Project Setup
 
