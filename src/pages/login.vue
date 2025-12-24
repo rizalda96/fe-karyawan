@@ -63,14 +63,12 @@
                   </div>
                   <div class="mt-3">
                     <div class="form-check custom-login">
-                      <input
-                        class="form-check-input"
-                        type="checkbox"
-                        value=""
-                        id="defaultCheck1"
-                        checked
-                      />
-                      <label class="form-check-label" for="defaultCheck1"> Remember me </label>
+                      <router-link
+                        to="/forget-password"
+                        class="float-end link-danger fw-medium fs-12"
+                      >
+                        Forget password ?
+                      </router-link>
                     </div>
                   </div>
                 </div>
@@ -79,6 +77,15 @@
                 <button :disabled="loading" type="submit" class="btn btn-primary">
                   {{ loading ? 'Logging in...' : 'Sign In' }}
                 </button>
+              </div>
+
+              <div class="text-center my-3 authentication-barrier">
+                <span class="op-4 fs-13">OR</span>
+              </div>
+
+              <div class="text-center mt-3 fw-medium">
+                Dont have an account?
+                <router-link to="/register" class="text-primary"> Register Here </router-link>
               </div>
             </Form>
           </div>

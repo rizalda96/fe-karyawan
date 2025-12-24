@@ -33,6 +33,30 @@ export const useAuthStore = defineStore('auth', {
         throw error
       }
     },
+    async signUp(credential) {
+      try {
+        const response = await AuthService.login(credential)
+
+        const { token, user } = response.data
+
+        this.token = token
+        this.permissions = [
+          {
+            action: 'manage',
+            subject: 'all',
+          },
+        ]
+        this.user = user
+
+        return {
+          status: !!token,
+          messages: 'Login successful!',
+        }
+      } catch (error) {
+        console.error(error)
+        throw error
+      }
+    },
   },
   // getters: {
   // },
