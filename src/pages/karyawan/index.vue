@@ -4,7 +4,7 @@
     <div class="col-12">
       <div class="card custom-card overflow-hidden">
         <div class="card-header justify-content-between">
-          <div class="card-title">Recent Invoices</div>
+          <div class="card-title">Karyawan List</div>
           <div class="d-flex flex-wrap gap-2">
             <button
               type="button"
@@ -166,7 +166,14 @@ const handleAdd = () => {
   })
 }
 
-const handleEdit = (id) => {}
+const handleEdit = (id) => {
+  router.push({
+    name: 'karyawan-id-edit',
+    params: {
+      id: id,
+    },
+  })
+}
 
 const handleDelete = (id) => {
   $app

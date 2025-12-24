@@ -1,7 +1,7 @@
 <template>
   <Pageheader :propData="dataToPass" />
 
-  <Form @submit="handleAdd" class="mb-3">
+  <Form @submit="handleSubmit" class="mb-3">
     <div class="row gy-3">
       <div class="col-xl-12">
         <label for="email" class="form-label text-default">Email</label>
@@ -119,16 +119,23 @@ import { Form, Field, ErrorMessage } from 'vee-validate'
 import Pageheader from '@/components/shared/pageheader/pageheader.vue'
 
 definePage({
+  props: true,
   meta: {
-    label: 'Add Karyawan',
-    action: 'create',
+    label: 'Edit Karyawan',
+    action: 'update',
     subject: 'Karyawan',
+  },
+})
+
+const props = defineProps({
+  id: {
+    type: String,
   },
 })
 
 const dataToPass = {
   title: 'Karyawan',
-  currentpage: 'Add',
+  currentpage: 'Edit',
   activepage: 'Karyawan Form',
 }
 
@@ -147,13 +154,36 @@ const form = reactive({
   alamat: null,
 })
 
-const handleAdd = () => {
+onMounted(() => {
+  fetchData()
+})
+
+const fetchData = async () => {
+  loading.value = true
+  try {
+    if (props.id) {
+      const { data } = await $http.get(`${$app.api_url}karyawan/${props.id}`)
+
+      form.email = data.email
+      form.name = data.name
+      form.phone = data.phone
+      form.jenis_kelamin = data.jenis_kelamin
+      form.alamat = data.alamat
+      loading.value = false
+    }
+  } catch (error) {
+    loading.value = false
+    $app.errorAlert(error)
+  }
+}
+
+const handleSubmit = () => {
   $app
     .confirm({
       text: 'Apakah data sudah sesuai ?',
 
       preConfirm: () => {
-        return $http.post(`${$app.api_url}karyawan/create`, form).then((response) => {
+        return $http.patch(`${$app.api_url}karyawan/${props.id}/update`, form).then((response) => {
           if (response.status > 300) {
             let errors = response.data.message
             throw new Error(errors)
@@ -166,7 +196,7 @@ const handleAdd = () => {
     .then((result) => {
       if (result.isDismissed) return
       if (result.value) {
-        $app.success('Data berhasil ditambahkan!').then((response) => {
+        $app.success('Data berhasil diubah!').then((response) => {
           router.push({
             name: 'karyawan',
           })
