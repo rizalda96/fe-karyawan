@@ -71,7 +71,9 @@
                   </div>
                 </div>
                 <div class="d-grid mt-3">
-                  <router-link to="/login" class="btn btn-primary">Register</router-link>
+                  <button :disabled="loading" type="submit" class="btn btn-primary">
+                    {{ loading ? 'Registering...' : 'Register' }}
+                  </button>
                 </div>
                 <div class="text-center my-3 authentication-barrier">
                   <span class="op-4 fs-13">OR</span>
@@ -93,9 +95,10 @@
 import { Form, Field, ErrorMessage } from 'vee-validate'
 
 import ParticlesJs from '@/common/reuseble-plugin/particles-js.vue'
-import PasswordInput from '@/components/UI/passwordInput.vue'
 import { useAuthStore } from '@/stores/auth.store'
 import schemaLogin from '@/validations/auth'
+import { toast } from 'vue3-toastify'
+import 'vue3-toastify/dist/index.css'
 
 definePage({
   meta: {
@@ -105,6 +108,7 @@ definePage({
   },
 })
 
+const $app = inject('app')
 const store = useAuthStore()
 
 const loading = ref(false)
@@ -118,7 +122,11 @@ const handleRegister = async () => {
     loading.value = true
 
     const { status, messages } = await store.signUp(form)
-    if (!status) return $app.warning(messages || 'Register failed!')
+    if (!status) {
+      $app.warning(messages || 'Register failed!')
+      loading.value = false
+      return
+    }
 
     toast.success(messages || 'Register successful! Please check your email', {
       theme: 'auto',
@@ -128,10 +136,10 @@ const handleRegister = async () => {
       hideProgressBar: true,
     })
 
-    // setTimeout(() => {
-    //   loading.value = true
-    //   window.location.href = `/`
-    // }, 1000)
+    setTimeout(() => {
+      loading.value = true
+      window.location.href = `/`
+    }, 1000)
   } catch (err) {
     loading.value = false
     console.error(err)

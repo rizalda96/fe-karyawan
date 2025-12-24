@@ -11,6 +11,16 @@ class AuthService extends BaseService {
       .then((response) => response)
       .catch(({ response }) => response)
   }
+
+  register(credential) {
+    return this.$http
+      .post(`${this.$app.api_url}auth/register`, credential)
+      .then((response) => response)
+      .catch(({ response }) => response)
+  }
+  verifyEmail(token, code) {
+    return this.$http.post(`${this.$app.api_url}auth/verify`, { token, code })
+  }
 }
 
 export default new AuthService()

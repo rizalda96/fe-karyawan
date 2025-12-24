@@ -35,28 +35,40 @@ export const useAuthStore = defineStore('auth', {
     },
     async signUp(credential) {
       try {
-        const response = await AuthService.login(credential)
-
-        const { token, user } = response.data
-
-        this.token = token
-        this.permissions = [
-          {
-            action: 'manage',
-            subject: 'all',
-          },
-        ]
-        this.user = user
-
+        const response = await AuthService.register(credential)
         return {
-          status: !!token,
-          messages: 'Login successful!',
+          status: response.status >= 200 && response.status < 300,
+          messages: response.data.message,
         }
       } catch (error) {
         console.error(error)
         throw error
       }
     },
+    async verifyEmail(token, code) {
+      try {
+        const response = await AuthService.verifyEmail(token, code);
+
+        return {
+          success: response.status >= 200 && response.status < 300,
+          message: response.data.message,
+        };
+
+      } catch (error) {
+        if (error.response) {
+          return {
+            success: false,
+            status: error.response.status,
+            message: error.response.data?.message || 'Terjadi kesalahan',
+          };
+        }
+
+        return {
+          success: false,
+          message: error || 'Server tidak dapat dihubungi',
+        };
+      }
+    }
   },
   // getters: {
   // },
