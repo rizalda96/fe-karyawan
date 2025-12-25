@@ -110,6 +110,7 @@ const cols =
     { field: 'name', title: 'Nama' },
     { field: 'jenis_kelamin', title: 'Jenis Kelamin' },
     { field: 'phone', title: 'Telp' },
+    { field: 'kota', title: 'Kota' },
     { field: 'alamat', title: 'Alamat' },
     { field: 'rowaction', title: 'Action' },
   ]) || []

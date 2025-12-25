@@ -84,6 +84,24 @@
         </ErrorMessage>
       </div>
       <div class="col-xl-12">
+        <label for="kota" class="form-label text-default">Kota</label>
+        <Field id="kota" name="kota" v-model="form.kota" v-slot="{ meta, field }">
+          <input
+            v-bind="field"
+            type="text"
+            class="form-control"
+            placeholder="Enter Kota"
+            :class="{
+              'is-valid': meta.valid && meta.touched,
+              'is-invalid': !meta.valid && meta.touched,
+            }"
+          />
+        </Field>
+        <ErrorMessage name="kota" v-slot="{ message }">
+          <div class="invalid-feedback">{{ message }}</div>
+        </ErrorMessage>
+      </div>
+      <div class="col-xl-12">
         <label for="alamat" class="form-label text-default">Alamat</label>
         <Field id="alamat" name="alamat" v-model="form.alamat" v-slot="{ meta, field }">
           <textarea
@@ -145,6 +163,8 @@ const form = reactive({
   phone: null,
   jenis_kelamin: null,
   alamat: null,
+  kota: null,
+  tanggal_lahir: null,
 })
 
 const handleAdd = () => {
