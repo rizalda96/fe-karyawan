@@ -108,6 +108,7 @@ const cols =
   ref([
     { field: 'email', title: 'Email' },
     { field: 'name', title: 'Nama' },
+    { field: 'tanggal_lahir', title: 'Tanggal Lahir' },
     { field: 'jenis_kelamin', title: 'Jenis Kelamin' },
     { field: 'phone', title: 'Telp' },
     { field: 'kota', title: 'Kota' },

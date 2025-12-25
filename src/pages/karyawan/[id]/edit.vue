@@ -40,6 +40,24 @@
         </ErrorMessage>
       </div>
       <div class="col-xl-12">
+        <label for="tanggal_lahir" class="form-label text-default">Tanggal Lahir</label>
+        <Field id="tanggal_lahir" name="tanggal_lahir" v-model="form.tanggal_lahir" v-slot="{ meta, field }">
+          <input
+            v-bind="field"
+            type="date"
+            class="form-control"
+            placeholder="Enter Tanggal Lahir"
+            :class="{
+              'is-valid': meta.valid && meta.touched,
+              'is-invalid': !meta.valid && meta.touched,
+            }"
+          />
+        </Field>
+        <ErrorMessage name="tanggal_lahir" v-slot="{ message }">
+          <div class="invalid-feedback">{{ message }}</div>
+        </ErrorMessage>
+      </div>
+      <div class="col-xl-12">
         <label for="phone" class="form-label text-default">Phone</label>
         <Field id="phone" name="phone" v-model="form.phone" v-slot="{ meta, field }">
           <input
@@ -190,7 +208,7 @@ const fetchData = async () => {
       form.jenis_kelamin = data.jenis_kelamin
       form.alamat = data.alamat
       form.kota = data.kota
-      // form.tanggal_lahir = data.tanggal_lahir
+      form.tanggal_lahir = data.tanggal_lahir
       loading.value = false
     }
   } catch (error) {

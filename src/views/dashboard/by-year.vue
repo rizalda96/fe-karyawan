@@ -20,31 +20,39 @@ import {
   TooltipComponent,
   LegendComponent,
   GridComponent,
+  DatasetComponent,
 } from 'echarts/components'
 import VChart from 'vue-echarts'
 
-use([CanvasRenderer, BarChart, TitleComponent, TooltipComponent, LegendComponent, GridComponent])
+use([CanvasRenderer, BarChart, TitleComponent, TooltipComponent, LegendComponent, GridComponent, DatasetComponent])
 
-const option = ref({
+const $app = inject('app')
+const $http = inject('http')
+const seriesData = ref([])
+
+const option = reactive({
   tooltip: {
     trigger: 'axis',
     axisPointer: {
       type: 'shadow',
     },
   },
-  legend: {
-    top: 'top',
-  },
+  // legend: {
+  //   top: 'top',
+  // },
   grid: {
     left: '3%',
     right: '4%',
     bottom: '3%',
     containLabel: true,
   },
+  dataset: {
+    source: seriesData,
+    dimensions: ['year', 'total'],
+  },
   xAxis: [
     {
       type: 'category',
-      data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
       axisTick: {
         alignWithLabel: true,
       },
@@ -57,13 +65,29 @@ const option = ref({
   ],
   series: [
     {
-      name: 'Direct',
+      name: 'year',
       type: 'bar',
-      barWidth: '60%',
-      data: [10, 52, 200, 334, 390, 330, 220],
+      barWidth: '50%',
     },
   ],
 })
+
+onMounted(() => {
+  fetchData()
+})
+
+const loading = ref(false)
+const fetchData = async () => {
+  loading.value = true
+  try {
+    const { data } = await $http.get(`${$app.api_url}dashboard/by-year-date`)
+    seriesData.value = data
+    
+  } catch (error) {
+    loading.value = false
+    $app.errorAlert(error)
+  }
+}
 </script>
 
 <style scoped>
