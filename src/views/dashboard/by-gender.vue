@@ -15,35 +15,36 @@
 import { use } from 'echarts/core'
 import { CanvasRenderer } from 'echarts/renderers'
 import { PieChart } from 'echarts/charts'
-import { TitleComponent, TooltipComponent, LegendComponent } from 'echarts/components'
+import { TitleComponent, TooltipComponent, LegendComponent, DatasetComponent } from 'echarts/components'
 import VChart from 'vue-echarts'
-import { ref, provide } from 'vue'
 
-use([CanvasRenderer, PieChart, TitleComponent, TooltipComponent, LegendComponent])
+use([CanvasRenderer, PieChart, TitleComponent, TooltipComponent, LegendComponent, DatasetComponent])
 
-const option = ref({
+const $app = inject('app')
+const $http = inject('http')
+// '{a} <br/>{b} : {c} ({d}%)'
+const seriesPie = ref([])
+const option = reactive({
   tooltip: {
     trigger: 'item',
-    formatter: '{a} <br/>{b} : {c} ({d}%)',
+    formatter: (data) => {
+      return `${data.seriesName} <br/>${data.name} : ${data.value.total} (${data.percent}%)`
+    },
   },
   legend: {
     orient: 'vertical',
     left: 'left',
-    data: ['Direct', 'Email', 'Ad Networks', 'Video Ads', 'Search Engines'],
+  },
+  dataset: {
+    dimensions: ['jenis_kelamin', 'total'],
+    source: seriesPie,
   },
   series: [
     {
-      name: 'Traffic Sources',
+      name: 'Jenis Kelamin',
       type: 'pie',
       radius: '55%',
       center: ['50%', '40%'],
-      data: [
-        { value: 335, name: 'Direct' },
-        { value: 310, name: 'Email' },
-        { value: 234, name: 'Ad Networks' },
-        { value: 135, name: 'Video Ads' },
-        { value: 1548, name: 'Search Engines' },
-      ],
       emphasis: {
         itemStyle: {
           shadowBlur: 10,
@@ -54,6 +55,23 @@ const option = ref({
     },
   ],
 })
+
+onMounted(() => {
+  fetchData()
+})
+
+const loading = ref(false)
+const fetchData = async () => {
+  loading.value = true
+  try {
+    const { data } = await $http.get(`${$app.api_url}dashboard/by-gender`)
+    seriesPie.value = data
+    
+  } catch (error) {
+    loading.value = false
+    $app.errorAlert(error)
+  }
+}
 </script>
 
 <style scoped>
