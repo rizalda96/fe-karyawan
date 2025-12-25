@@ -15,7 +15,7 @@
 import { use } from 'echarts/core'
 import { CanvasRenderer } from 'echarts/renderers'
 import { LineChart } from 'echarts/charts'
-import { TitleComponent, TooltipComponent, LegendComponent } from 'echarts/components'
+import { TitleComponent, TooltipComponent, LegendComponent, DatasetComponent } from 'echarts/components'
 import { LegacyGridContainLabel } from 'echarts/features'
 import VChart from 'vue-echarts'
 
@@ -26,19 +26,21 @@ use([
   TooltipComponent,
   LegendComponent,
   LegacyGridContainLabel,
+  DatasetComponent,
 ])
 
-const option = ref({
+const $app = inject('app')
+const $http = inject('http')
+const seriesData = ref([])
+const option = reactive({
   tooltip: {
     trigger: 'axis',
   },
   legend: {
-    data: ['day'],
     top: 0,
   },
   xAxis: {
     type: 'category',
-    data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
   },
   grid: {
     left: 0,
@@ -46,18 +48,38 @@ const option = ref({
     bottom: 0,
     containLabel: true,
   },
+  dataset: {
+    source: seriesData,
+    dimensions: ['kota', 'total'],
+  },
   yAxis: {
     type: 'value',
   },
   series: [
     {
-      name: 'day',
-      data: [150, 230, 224, 218, 135, 147, 260],
+      // name: 'day',
       type: 'line',
       smooth: true,
     },
   ],
 })
+
+onMounted(() => {
+  fetchData()
+})
+
+const loading = ref(false)
+const fetchData = async () => {
+  loading.value = true
+  try {
+    const { data } = await $http.get(`${$app.api_url}dashboard/by-city`)
+    seriesData.value = data
+    
+  } catch (error) {
+    loading.value = false
+    $app.errorAlert(error)
+  }
+}
 </script>
 
 <style scoped>
